@@ -86,6 +86,15 @@ if __name__ == "__main__":
                     dfs(lambda: grid.draw(), grid, start, end)
                     # ... and the others?
                     started = False
+                if event.key == pygame.K_u and not started:
+                    # run the algorithm
+                    for row in grid.grid:
+                        for spot in row:
+                            spot.update_neighbors(grid.grid)
+                    # here you can call the algorithms
+                    ucs(lambda: grid.draw(), grid, start, end)
+                    # ... and the others?
+                    started = False
 
                 if event.key == pygame.K_c:
                     print("Clearing the grid...")

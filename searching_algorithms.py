@@ -169,6 +169,35 @@ def astar(draw: callable, grid: Grid, start: Spot, end: Spot) -> bool:
     
     return False
 
+def ucs(draw: callable, grid: Grid, start: Spot, end: Spot) -> bool:
+    open_heap = PriorityQueue()
+    open_heap.put((0, start))
+    visited = {start: (0, None)}
+    came_from = {}
+
+    while not open_heap.empty():
+        current_cost, current = open_heap.get()
+        if current is end:
+            while current in came_from:
+                current = came_from[current]
+                current.make_path()
+                draw()
+            end.make_end()
+            start.make_start()
+            return True
+
+        for neighbor in current.neighbors:
+            total_cost = current_cost + 1
+            if neighbor not in visited or total_cost < visited[neighbor][0]:
+                visited[neighbor] = (total_cost, current)
+                open_heap.put((total_cost, neighbor))
+                neighbor.make_open()
+        
+        draw()
+        if current != start:
+            current.make_closed()
+    return False
+
 # and the others algorithms...
 # ▢ Depth-Limited Search (DLS)
 # ▢ Uninformed Cost Search (UCS)
